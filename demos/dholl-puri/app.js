@@ -24,9 +24,10 @@ function findItem(query) {
 function renderMenu() {
   menuEl.innerHTML = MENU.map(
     (m) => `<li>
-      <div>${m.name}</div>
-      <div class="price">Rs ${m.price}</div>
-      <button data-add="${m.id}">Add</button>
+      <span class="name">${m.name}</span>
+      <span class="dots"></span>
+      <span class="price">Rs ${m.price}</span>
+      <button data-add="${m.id}">+ add</button>
     </li>`
   ).join("");
 }

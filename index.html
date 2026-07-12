@@ -3,36 +3,71 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WebMCP Demos</title>
+  <title>webmcp demos</title>
   <link rel="stylesheet" href="shared/style.css" />
+  <style>
+    .demo-list {
+      list-style: none;
+      padding: 0;
+      margin: 2.5rem 0;
+    }
+    .demo-list li {
+      margin-bottom: 1.75rem;
+    }
+    .demo-list a {
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 3px solid var(--ink);
+    }
+    .demo-list a:hover {
+      background: var(--accent);
+    }
+    .demo-list p {
+      margin: 0.3rem 0 0;
+      max-width: 46ch;
+    }
+    .footnote {
+      font-size: 0.8rem;
+      opacity: 0.65;
+      border-top: 2px solid var(--ink);
+      padding-top: 1rem;
+      max-width: 52ch;
+    }
+    .footnote a {
+      color: inherit;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>WebMCP Demos</h1>
-    <p class="lede">
-      Small experiments where the page registers tools for the AI agent living in your browser.
-      Each demo works by hand too — the agent is optional, the tools are not.
+    <h1>webmcp demos</h1>
+    <p>
+      Little toys where the AI agent in your browser does the clicking.
+      The pages register tools — <a href="https://sandeep.ramgolam.com/blog/webmcp-in-the-browser">WebMCP</a> does the rest.
+      Everything also works the old way: with your fingers.
     </p>
   </header>
   <main>
-    <ul class="cards">
-      <li class="card">
-        <a href="demos/dholl-puri/">
-          <h3>🫓 Dholl Puri Stand</h3>
-          <p>Order street food through imperative tools — menu, cart, checkout.</p>
-        </a>
+    <ul class="demo-list">
+      <li>
+        <a href="demos/dholl-puri/">Dholl Puri Stand</a>
+        <p>A roadside food stand. Your agent takes the order, you eat.</p>
       </li>
-      <li class="card">
-        <a href="demos/pixel-painter/">
-          <h3>🎨 Pixel Painter</h3>
-          <p>Ask the agent to draw on a 16×16 canvas with batched paint calls.</p>
-        </a>
+      <li>
+        <a href="demos/pixel-painter/">Pixel Painter</a>
+        <p>A 16×16 canvas. Ask for a heart, get a heart. Usually.</p>
       </li>
     </ul>
-    <p class="muted">
-      Requires Chrome with the WebMCP origin trial for the agent side — the
-      WebMCP Model Context Tool Inspector extension is the easiest way to test.
+    <p class="footnote">
+      Needs Chrome with the following:
     </p>
+    <ul>
+      <li> WebMCP origin trial on the agent side — the</li>
+      <li>"WebMCP Model Context Tool Inspector" extension</li>
+      <li>Serve locally with <code>pnpx vite</code></li>
+    </ul>
   </main>
 </body>
 </html>

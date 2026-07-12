@@ -3,59 +3,85 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pixel Painter — WebMCP Demos</title>
+  <title>Pixel Painter — webmcp demos</title>
   <link rel="stylesheet" href="../../shared/style.css" />
   <style>
+    :root {
+      --paper: #e8e6df;
+      --accent: #ff6ac1;
+    }
+
+    h1 {
+      /* blocky, stepped title */
+      text-shadow: 3px 3px 0 var(--accent);
+    }
+
+    .board-wrap {
+      /* checkerboard mat behind the canvas */
+      padding: 14px;
+      display: inline-block;
+      background:
+        repeating-conic-gradient(#d6d3ca 0% 25%, transparent 0% 50%)
+        0 0 / 16px 16px;
+      border: 3px solid var(--ink);
+      box-shadow: 7px 7px 0 var(--ink);
+      max-width: 100%;
+    }
+
     .board {
       display: grid;
       grid-template-columns: repeat(16, 1fr);
-      gap: 1px;
-      background: #e5e7eb;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      overflow: hidden;
+      width: min(440px, calc(100vw - 6rem));
       aspect-ratio: 1;
-      max-width: 480px;
+      border: 2px solid var(--ink);
       touch-action: none;
+      cursor: crosshair;
+      image-rendering: pixelated;
     }
+
     .board .cell {
       background: #fff;
     }
+
     .palette {
       display: flex;
-      gap: 0.4rem;
-      margin: 0.75rem 0;
+      gap: 0.5rem;
+      margin: 1.25rem 0;
       flex-wrap: wrap;
     }
+
     .palette button {
-      width: 2rem;
-      height: 2rem;
-      border-radius: 6px;
+      width: 2.1rem;
+      height: 2.1rem;
       padding: 0;
-      border: 2px solid transparent;
+      border: 2px solid var(--ink);
+      box-shadow: 3px 3px 0 var(--ink);
     }
+
     .palette button[aria-pressed="true"] {
-      border-color: #1f2937;
+      translate: 3px 3px;
+      box-shadow: 0 0 0 var(--ink);
     }
+
     .actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
+      margin-top: 1.25rem;
     }
   </style>
 </head>
 <body>
   <header>
-    <a class="back" href="../../">← webmcp demos</a>
-    <h1>🎨 Pixel Painter</h1>
-    <p class="lede">A 16×16 canvas the agent can paint on, one batch of pixels at a time.</p>
+    <a class="back" href="../../">← all demos</a>
+    <h1>Pixel Painter</h1>
+    <p>16×16. One tool call can paint a whole batch of pixels — hand your agent the brush.</p>
   </header>
   <main>
-    <p class="try">Try asking your agent: “draw a red heart in the middle of the canvas” or “paint a sunset gradient”.</p>
+    <p class="try">"draw a red heart in the middle of the canvas"</p>
     <div class="palette" id="palette"></div>
-    <div class="board" id="board" aria-label="pixel canvas"></div>
+    <div class="board-wrap">
+      <div class="board" id="board" aria-label="pixel canvas"></div>
+    </div>
     <div class="actions">
-      <button id="clear">Clear canvas</button>
+      <button id="clear">wipe it</button>
     </div>
   </main>
   <script type="module" src="app.js"></script>

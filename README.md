@@ -18,7 +18,7 @@ More ideas on the shortlist, not built yet: a declarative-forms demo (`toolname`
 No build step — any static server works:
 
 ```sh
-npx serve .
+pnpx vite
 ```
 
 ## Testing with an agent

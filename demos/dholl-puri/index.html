@@ -3,74 +3,150 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dholl Puri Stand — WebMCP Demos</title>
+  <title>Dholl Puri Stand — webmcp demos</title>
   <link rel="stylesheet" href="../../shared/style.css" />
   <style>
+    :root {
+      --paper: #fbf3df;
+      --accent: #ffd23f;
+      --chili: #d43d2a;
+    }
+
+    .sign {
+      background: var(--ink);
+      color: var(--paper);
+      display: inline-block;
+      padding: 0.5rem 1.25rem 0.6rem;
+      transform: rotate(-1deg);
+      box-shadow: 5px 5px 0 var(--chili);
+    }
+
+    .sign h1 {
+      margin: 0;
+      color: var(--accent);
+    }
+
+    .sign p {
+      margin: 0;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* painted price board */
     .menu {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 0.6rem;
       list-style: none;
-      padding: 0;
-    }
-    .menu li {
-      border: 1px solid #e5e7eb;
+      padding: 1rem 1.25rem;
+      margin: 1.5rem 0;
+      border: 3px solid var(--ink);
       background: #fff;
-      border-radius: 10px;
-      padding: 0.6rem 0.75rem;
+      box-shadow: 6px 6px 0 var(--ink);
     }
+
+    .menu li {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.35rem 0;
+    }
+
+    .menu .name {
+      font-weight: 700;
+    }
+
+    .menu .dots {
+      flex: 1;
+      border-bottom: 2px dotted rgba(0, 0, 0, 0.35);
+      translate: 0 -4px;
+    }
+
     .menu .price {
-      color: #6b7280;
-      font-size: 0.85rem;
+      color: var(--chili);
+      font-weight: 700;
     }
+
+    .menu button {
+      font-size: 0.75rem;
+      padding: 0.1rem 0.5rem;
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    /* the order as a till receipt */
     .order {
       background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      margin-top: 1rem;
+      max-width: 340px;
+      padding: 1rem 1.1rem 1.4rem;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.08);
+      font-size: 0.9rem;
+      /* torn bottom edge */
+      clip-path: polygon(0 0, 100% 0, 100% calc(100% - 8px), 96% 100%, 92% calc(100% - 7px), 88% 100%, 84% calc(100% - 8px), 80% 100%, 76% calc(100% - 6px), 72% 100%, 68% calc(100% - 8px), 64% 100%, 60% calc(100% - 7px), 56% 100%, 52% calc(100% - 8px), 48% 100%, 44% calc(100% - 6px), 40% 100%, 36% calc(100% - 8px), 32% 100%, 28% calc(100% - 7px), 24% 100%, 20% calc(100% - 8px), 16% 100%, 12% calc(100% - 6px), 8% 100%, 4% calc(100% - 8px), 0 100%);
     }
+
+    .order strong {
+      display: block;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border-bottom: 1px dashed var(--ink);
+      padding-bottom: 0.4rem;
+    }
+
     .order ul {
       list-style: none;
-      margin: 0.4rem 0;
+      margin: 0.5rem 0;
       padding: 0;
     }
+
     .order li {
       display: flex;
       justify-content: space-between;
-      padding: 0.15rem 0;
+      padding: 0.1rem 0;
     }
+
     .order .total {
-      border-top: 1px solid #e5e7eb;
-      margin-top: 0.4rem;
-      padding-top: 0.4rem;
-      font-weight: 700;
       display: flex;
       justify-content: space-between;
+      font-weight: 700;
+      border-top: 1px dashed var(--ink);
+      padding-top: 0.4rem;
+      margin-bottom: 0.75rem;
     }
+
+    .order button {
+      width: 100%;
+      background: var(--accent);
+    }
+
     .confirmation {
-      background: #dcfce7;
-      color: #166534;
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      margin-top: 1rem;
       display: none;
+      margin-top: 1.25rem;
+      max-width: 340px;
+      border: 3px solid var(--ink);
+      background: var(--accent);
+      padding: 0.75rem 1rem;
+      font-weight: 700;
+      transform: rotate(0.5deg);
+      box-shadow: 5px 5px 0 var(--ink);
     }
   </style>
 </head>
 <body>
   <header>
-    <a class="back" href="../../">← webmcp demos</a>
-    <h1>🫓 Dholl Puri Stand</h1>
-    <p class="lede">A roadside stand where your agent takes the order.</p>
+    <a class="back" href="../../">← all demos</a>
+    <div style="margin-top: 1.25rem">
+      <div class="sign">
+        <h1>Dholl Puri 25</h1>
+        <p>manze cauchemar depi 1987</p>
+      </div>
+    </div>
   </header>
   <main>
-    <p class="try">Try asking your agent: “order two dholl puri with extra satini and a big alouda, then check out for Sandeep”.</p>
+    <p class="try">"order two dholl puri with extra satini and a big alouda, then check out for Sandeep"</p>
     <ul class="menu" id="menu"></ul>
     <div class="order">
-      <strong>Your order</strong>
+      <strong>Ou commande</strong>
       <ul id="order-items"><li class="muted">Nothing yet — hungry?</li></ul>
-      <div class="total"><span>Total</span><span id="order-total">Rs 0</span></div>
+      <div class="total"><span>TOTAL</span><span id="order-total">Rs 0</span></div>
       <button class="primary" id="checkout">Check out</button>
     </div>
     <div class="confirmation" id="confirmation"></div>
