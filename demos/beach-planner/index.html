@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beach Planner — WebMCP Demos</title>
+  <link rel="stylesheet" href="../../shared/style.css" />
+  <style>
+    .beaches {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 0.6rem;
+      list-style: none;
+      padding: 0;
+    }
+    .beaches li {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem 0.75rem;
+    }
+    .beaches .meta {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+    .itinerary {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+    }
+    .itinerary ol {
+      margin: 0.4rem 0 0;
+      padding-left: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="back" href="../../">← webmcp demos</a>
+    <h1>🏖️ Beach Planner</h1>
+    <p class="lede">
+      This demo uses the <strong>declarative API</strong>: the two forms below are the tools.
+      No JavaScript registration — just <code>toolname</code> attributes on plain HTML forms
+      (Chrome origin trial syntax).
+    </p>
+  </header>
+  <main>
+    <p class="try">Try asking your agent: “find me a calm beach in the south and add it to Saturday”.</p>
+
+    <form toolname="filter-beaches" tooldescription="Filter the list of Mauritian beaches by region and vibe">
+      <label>Region
+        <select name="region" toolparamdescription="One of: any, north, south, east, west">
+          <option value="any">Any</option>
+          <option value="north">North</option>
+          <option value="south">South</option>
+          <option value="east">East</option>
+          <option value="west">West</option>
+        </select>
+      </label>
+      <label>Vibe
+        <select name="vibe" toolparamdescription="One of: any, calm, lively, wild">
+          <option value="any">Any</option>
+          <option value="calm">Calm</option>
+          <option value="lively">Lively</option>
+          <option value="wild">Wild</option>
+        </select>
+      </label>
+      <button type="submit">Filter</button>
+    </form>
+
+    <ul class="beaches" id="beaches"></ul>
+
+    <form toolname="add-to-itinerary" tooldescription="Add a beach to the weekend itinerary on a given day">
+      <label>Beach
+        <input type="text" name="beach" toolparamdescription="Name of the beach to add" required />
+      </label>
+      <label>Day
+        <select name="day" toolparamdescription="Saturday or Sunday">
+          <option>Saturday</option>
+          <option>Sunday</option>
+        </select>
+      </label>
+      <button type="submit" class="primary">Add to itinerary</button>
+    </form>
+
+    <div class="itinerary">
+      <strong>Weekend itinerary</strong>
+      <ol id="itinerary"><li class="muted">Nothing planned yet.</li></ol>
+    </div>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
