@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Painter — WebMCP Demos</title>
+  <link rel="stylesheet" href="../../shared/style.css" />
+  <style>
+    .board {
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      gap: 1px;
+      background: #e5e7eb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      max-width: 480px;
+      touch-action: none;
+    }
+    .board .cell {
+      background: #fff;
+    }
+    .palette {
+      display: flex;
+      gap: 0.4rem;
+      margin: 0.75rem 0;
+      flex-wrap: wrap;
+    }
+    .palette button {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 6px;
+      padding: 0;
+      border: 2px solid transparent;
+    }
+    .palette button[aria-pressed="true"] {
+      border-color: #1f2937;
+    }
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="back" href="../../">← webmcp demos</a>
+    <h1>🎨 Pixel Painter</h1>
+    <p class="lede">A 16×16 canvas the agent can paint on, one batch of pixels at a time.</p>
+  </header>
+  <main>
+    <p class="try">Try asking your agent: “draw a red heart in the middle of the canvas” or “paint a sunset gradient”.</p>
+    <div class="palette" id="palette"></div>
+    <div class="board" id="board" aria-label="pixel canvas"></div>
+    <div class="actions">
+      <button id="clear">Clear canvas</button>
+    </div>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
