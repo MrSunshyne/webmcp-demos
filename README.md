@@ -10,10 +10,8 @@ Background reading: [WebMCP: The Next User of Your Website is an Agent](https://
 | --- | --- |
 | [Dholl Puri Stand](demos/dholl-puri/) | Ordering flow with imperative tools (menu, cart, checkout) — the street food answer to Google's Pizza Maker |
 | [Pixel Painter](demos/pixel-painter/) | An agent painting on a 16×16 canvas through batched tool calls |
-| [Beach Planner](demos/beach-planner/) | The declarative API — plain HTML forms as tools, filtering Mauritian beaches and building an itinerary |
-| [Meetup Agenda](demos/meetup-agenda/) | Stateful tools building a frontend.mu meetup agenda, including a read-only tool the agent uses to check its work |
 
-More ideas on the shortlist, not built yet: a recipe scaler, an expense splitter for group trips, a CSS theme mixer where the agent tunes design tokens.
+More ideas on the shortlist, not built yet: a declarative-forms demo (`toolname` attributes on plain HTML forms), a recipe scaler, an expense splitter for group trips, a CSS theme mixer where the agent tunes design tokens.
 
 ## Running locally
 
