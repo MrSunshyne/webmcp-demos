@@ -21,7 +21,7 @@
       text-decoration: none;
       border-bottom: 3px solid var(--ink);
     }
-    .demo-list a:hover {
+    a:hover {
       background: var(--accent);
     }
     .demo-list p {
@@ -38,36 +38,42 @@
     .footnote a {
       color: inherit;
     }
+
+    code {
+      background-color: azure;
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>webmcp demos</h1>
     <p>
-      Little toys where the AI agent in your browser does the clicking.
-      The pages register tools — <a href="https://sandeep.ramgolam.com/blog/webmcp-in-the-browser">WebMCP</a> does the rest.
-      Everything also works the old way: with your fingers.
+      A set of small webmcp demos where you give instructions to your AI agent and it accomplishes the tasks for you.
+      The pages register tools and <a href="https://sandeep.ramgolam.com/blog/webmcp-in-the-browser">WebMCP</a> does the rest.
+      Everything also works without any ai (you click around to interact)
     </p>
   </header>
   <main>
+    <p class="note">
+      To check before proceeding
+    </p>
+    <ul>
+      <li>Enable a Chrome Flag <a href="chrome://flags/#enable-webmcp-testing">chrome://flags/#enable-webmcp-testing</a></li>
+      <li>Install the Chrome Extension <a href="https://chromewebstore.google.com/detail/gbpdfapgefenggkahomfgkhfehlcenpd">WebMCP Model Context Tool Inspector</a></li>
+      <li>Add a Gemini API Key from <a href="https://aistudio.google.com">aistudio.google.com</a></li>
+      <li>Serve locally with <code>pnpx vite</code></li>
+    </ul>
     <ul class="demo-list">
       <li>
-        <a href="demos/dholl-puri/">Dholl Puri Stand</a>
+        <a href="demos/dholl-puri/">DEMO 1: Dholl Puri Stand</a>
         <p>A roadside food stand. Your agent takes the order, you eat.</p>
       </li>
       <li>
-        <a href="demos/pixel-painter/">Pixel Painter</a>
+        <a href="demos/pixel-painter/">DEMO 2: Pixel Painter</a>
         <p>A 16×16 canvas. Ask for a heart, get a heart. Usually.</p>
       </li>
     </ul>
-    <p class="footnote">
-      Needs Chrome with the following:
-    </p>
-    <ul>
-      <li> WebMCP origin trial on the agent side — the</li>
-      <li>"WebMCP Model Context Tool Inspector" extension</li>
-      <li>Serve locally with <code>pnpx vite</code></li>
-    </ul>
+
   </main>
 </body>
 </html>
