@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dholl Puri Stand — WebMCP Demos</title>
+  <link rel="stylesheet" href="../../shared/style.css" />
+  <style>
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.6rem;
+      list-style: none;
+      padding: 0;
+    }
+    .menu li {
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.6rem 0.75rem;
+    }
+    .menu .price {
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+    .order {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+    }
+    .order ul {
+      list-style: none;
+      margin: 0.4rem 0;
+      padding: 0;
+    }
+    .order li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.15rem 0;
+    }
+    .order .total {
+      border-top: 1px solid #e5e7eb;
+      margin-top: 0.4rem;
+      padding-top: 0.4rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+    }
+    .confirmation {
+      background: #dcfce7;
+      color: #166534;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="back" href="../../">← webmcp demos</a>
+    <h1>🫓 Dholl Puri Stand</h1>
+    <p class="lede">A roadside stand where your agent takes the order.</p>
+  </header>
+  <main>
+    <p class="try">Try asking your agent: “order two dholl puri with extra satini and a big alouda, then check out for Sandeep”.</p>
+    <ul class="menu" id="menu"></ul>
+    <div class="order">
+      <strong>Your order</strong>
+      <ul id="order-items"><li class="muted">Nothing yet — hungry?</li></ul>
+      <div class="total"><span>Total</span><span id="order-total">Rs 0</span></div>
+      <button class="primary" id="checkout">Check out</button>
+    </div>
+    <div class="confirmation" id="confirmation"></div>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
