@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meetup Agenda — WebMCP Demos</title>
+  <link rel="stylesheet" href="../../shared/style.css" />
+  <style>
+    .meta-bar {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+      color: #4b5563;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 0.5rem 0.9rem;
+    }
+    .agenda {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+    }
+    .agenda li {
+      display: flex;
+      gap: 0.9rem;
+      align-items: baseline;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 0.6rem 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .agenda .time {
+      font-variant-numeric: tabular-nums;
+      color: #6b7280;
+      font-size: 0.85rem;
+      min-width: 3.2rem;
+    }
+    .agenda .talk {
+      font-weight: 600;
+    }
+    .agenda .speaker {
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="back" href="../../">← webmcp demos</a>
+    <h1>🎤 Meetup Agenda</h1>
+    <p class="lede">Let the agent build the next frontend.mu meetup schedule — times are computed automatically.</p>
+  </header>
+  <main>
+    <p class="try">Try asking your agent: “plan a meetup at Novity with an intro, two 30 minute talks about CSS and AI, and a lunch break — then read the agenda back to me”.</p>
+    <div class="meta-bar">
+      <span>📍 <span id="venue">Venue TBD</span></span>
+      <span>📅 <span id="date">Date TBD</span></span>
+      <span>⏰ starts <span id="start">10:00</span></span>
+    </div>
+    <ol class="agenda" id="agenda"><li class="muted">No sessions yet.</li></ol>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
