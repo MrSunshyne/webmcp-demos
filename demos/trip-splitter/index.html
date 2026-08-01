@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trip Splitter — webmcp demos</title>
+  <link rel="stylesheet" href="../../shared/style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.prod.js",
+        "vue-webmcp": "https://cdn.jsdelivr.net/npm/vue-webmcp@0.1/dist/index.mjs"
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --accent: #7fd8d8;
+      --sea: #1a6b8a;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    .sign {
+      background: var(--ink);
+      color: var(--paper);
+      display: inline-block;
+      padding: 0.5rem 1.25rem 0.6rem;
+      transform: rotate(-1deg);
+      box-shadow: 5px 5px 0 var(--sea);
+    }
+
+    .sign h1 {
+      margin: 0;
+      color: var(--accent);
+    }
+
+    .sign p {
+      margin: 0;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+    }
+
+    section {
+      margin: 1.5rem 0;
+    }
+
+    section > h2 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0 0 0.4rem;
+    }
+
+    .board {
+      border: 3px solid var(--ink);
+      background: #fff;
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 0.75rem 1rem;
+    }
+
+    .people {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .chip {
+      border: 2px solid var(--ink);
+      background: var(--accent);
+      font-weight: 700;
+      padding: 0.1rem 0.6rem;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    input,
+    select {
+      font: inherit;
+      border: 2px solid var(--ink);
+      padding: 0.25rem 0.5rem;
+      background: #fff;
+      max-width: 9rem;
+    }
+
+    .expenses li {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.15rem 0;
+      border-bottom: 1px dashed rgba(0, 0, 0, 0.25);
+    }
+
+    .expenses li:last-child {
+      border-bottom: none;
+    }
+
+    .expenses ul {
+      list-style: none;
+      margin: 0 0 0.75rem;
+      padding: 0;
+    }
+
+    .expenses .amount {
+      color: var(--sea);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .balances li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.15rem 0;
+    }
+
+    .balances ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .owes {
+      color: #b3261e;
+      font-weight: 700;
+    }
+
+    .gets {
+      color: #1a7a3a;
+      font-weight: 700;
+    }
+
+    .settle {
+      margin-top: 0.75rem;
+    }
+
+    .settle .board {
+      background: var(--accent);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <header>
+      <a class="back" href="../../">← all demos</a>
+      <div style="margin-top: 1.25rem">
+        <div class="sign">
+          <h1>Trip Splitter</h1>
+          <p>group expenses, split equally</p>
+        </div>
+      </div>
+      <div class="webmcp-badge" :data-state="isSupported ? 'on' : 'off'">
+        {{ isSupported ? 'WebMCP active — ' + registeredCount + ' tools registered' : 'no agent detected — works by hand too' }}
+      </div>
+    </header>
+    <main>
+      <p class="try">"add Ravi to the trip, log Rs 1200 from Priya for the catamaran, then tell me who owes whom"</p>
+
+      <section>
+        <h2>On this trip</h2>
+        <div class="board people">
+          <span class="chip" v-for="person in people" :key="person">{{ person }}</span>
+          <form @submit.prevent="submitPerson">
+            <input v-model="newPerson" placeholder="name" aria-label="New person" />
+            <button type="submit">Add</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="expenses">
+        <h2>Expenses — Rs {{ total }}</h2>
+        <div class="board">
+          <ul>
+            <li v-for="(expense, i) in expenses" :key="i">
+              <span>{{ expense.description }} <span class="muted">({{ expense.payer }})</span></span>
+              <span class="amount">Rs {{ expense.amount }}</span>
+            </li>
+          </ul>
+          <form @submit.prevent="submitExpense">
+            <select v-model="expensePayer" aria-label="Payer">
+              <option v-for="person in people" :key="person">{{ person }}</option>
+            </select>
+            <input v-model.number="expenseAmount" type="number" min="1" placeholder="Rs" aria-label="Amount" />
+            <input v-model="expenseDescription" placeholder="what for" aria-label="Description" />
+            <button type="submit">Add expense</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="balances">
+        <h2>Balances</h2>
+        <div class="board">
+          <ul>
+            <li v-for="balance in balances" :key="balance.name">
+              <span>{{ balance.name }}</span>
+              <span :class="balance.net < 0 ? 'owes' : balance.net > 0 ? 'gets' : 'muted'">
+                {{ balanceLine(balance) }}
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div class="settle">
+          <label>
+            <input v-model="showSettle" type="checkbox" />
+            Open the settle-up panel
+          </label>
+          <settle-panel
+            v-if="showSettle"
+            :people="people"
+            :log-call="logCall"
+            @paid="recordPayment"
+          ></settle-panel>
+          <p class="muted">
+            The record-payment tool is only registered while the panel is open.
+          </p>
+        </div>
+      </section>
+
+      <section class="webmcp-log">
+        <h2>Tool activity</h2>
+        <ol>
+          <li v-for="(entry, i) in log" :key="log.length - i">
+            <code>{{ entry.tool }}</code>
+            <span class="args">{{ entry.args }}</span>
+            <span class="result">{{ entry.result }}</span>
+          </li>
+        </ol>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
