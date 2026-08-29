@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beach Permit — webmcp demos</title>
+  <link rel="stylesheet" href="../../shared/style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.prod.js",
+        "vue-webmcp": "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3/dist/index.mjs"
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --paper: #efeae0;
+      --accent: #9fd8cb;
+      --stamp: #c1272d;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    h1 {
+      margin-bottom: 0;
+    }
+
+    .office {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0.2rem 0 0;
+      opacity: 0.6;
+    }
+
+    section {
+      margin: 1.75rem 0;
+    }
+
+    section > h2 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0 0 0.4rem;
+    }
+
+    .sheet {
+      border: 3px solid var(--ink);
+      background: #fff;
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 1rem 1.1rem;
+    }
+
+    /* Bound from isAgentActive rather than the :tool-form-active
+       pseudo-class, which some CSS toolchains still reject as unknown. */
+    .sheet.agent-active {
+      outline: 3px dashed var(--stamp);
+      outline-offset: 5px;
+    }
+
+    .field {
+      display: block;
+      margin-bottom: 0.8rem;
+    }
+
+    .field > span {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.2rem;
+    }
+
+    input,
+    select {
+      font: inherit;
+      border: 2px solid var(--ink);
+      padding: 0.3rem 0.5rem;
+      background: #fff;
+      width: 100%;
+      max-width: 22rem;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .row .field {
+      flex: 1 1 8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    fieldset {
+      border: 2px dashed var(--ink);
+      margin: 0 0 0.9rem;
+      padding: 0.5rem 0.75rem 0.7rem;
+    }
+
+    legend {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0 0.3rem;
+    }
+
+    .gear {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+    }
+
+    .gear label {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.9rem;
+    }
+
+    .gear input {
+      width: auto;
+      accent-color: var(--stamp);
+    }
+
+    .agent-note {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--stamp);
+      margin: 0 0 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .error {
+      color: var(--stamp);
+      font-size: 0.85rem;
+      margin: 0.5rem 0 0;
+    }
+
+    .lookup form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: flex-end;
+    }
+
+    .lookup .field {
+      margin-bottom: 0;
+      flex: 1 1 12rem;
+    }
+
+    .permits ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .permit {
+      position: relative;
+      border: 3px solid var(--ink);
+      background: #fff;
+      box-shadow: 5px 5px 0 var(--accent);
+      padding: 0.7rem 0.9rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .permit .reference {
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .permit dl {
+      margin: 0.4rem 0 0;
+      font-size: 0.85rem;
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 0.1rem 0.75rem;
+    }
+
+    .permit dt {
+      opacity: 0.55;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      align-self: center;
+    }
+
+    .permit dd {
+      margin: 0;
+    }
+
+    .stamp {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.7rem;
+      border: 2px solid var(--stamp);
+      color: var(--stamp);
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.1rem 0.4rem;
+      transform: rotate(-6deg);
+      text-transform: uppercase;
+    }
+
+    .empty {
+      opacity: 0.5;
+      font-size: 0.9rem;
+    }
+
+    .how {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      max-width: 56ch;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <header>
+      <a class="back" href="../../">← all demos</a>
+      <h1>Beach Permit</h1>
+      <p class="office">Beach Authority · overnight camping</p>
+      <div class="webmcp-badge" :data-state="isSupported ? 'on' : 'off'">
+        {{ isSupported ? 'WebMCP forms active — 2 forms exposed as tools' : 'no agent detected — the forms work by hand too' }}
+      </div>
+    </header>
+    <main>
+      <p class="try">"apply for a beach permit at Le Morne, 2 nights, 4 people, we're bringing a tent and a kayak — name it Sandeep"</p>
+
+      <p class="how">
+        Neither form has a hand-written <code>inputSchema</code>. The browser reads
+        <code>toolname</code>, <code>tooldescription</code> and each field's
+        <code>toolparamdescription</code> off the markup and synthesizes the schema
+        itself. One handler answers a person clicking Submit and an agent calling the
+        tool — the agent's answer goes back through <code>SubmitEvent.respondWith()</code>.
+      </p>
+
+      <section>
+        <h2>Apply</h2>
+        <div class="sheet" :class="{ 'agent-active': applyAgentActive }">
+          <p v-if="applyAgentActive" class="agent-note">An agent is filling this in…</p>
+          <!-- Uncontrolled on purpose: an agent writes straight into the fields,
+               and useWebMCPForm hands execute() what FormData reads back out. -->
+          <form v-bind="applyAttrs">
+            <label class="field">
+              <span>Name on the permit</span>
+              <input name="name" toolparamdescription="Full name of the person camping" required />
+            </label>
+            <label class="field">
+              <span>Beach</span>
+              <select name="beach" toolparamdescription="Which public beach to camp on" required>
+                <option v-for="beach in BEACHES" :key="beach">{{ beach }}</option>
+              </select>
+            </label>
+            <div class="row">
+              <label class="field">
+                <span>Nights</span>
+                <input name="nights" type="number" min="1" max="3" value="1"
+                       toolparamdescription="Nights of camping, 1 to 3" required />
+              </label>
+              <label class="field">
+                <span>People</span>
+                <input name="people" type="number" min="1" max="12" value="2"
+                       toolparamdescription="How many people in the group, 1 to 12" required />
+              </label>
+            </div>
+            <fieldset>
+              <legend>Gear</legend>
+              <!-- One name, many boxes: the browser types this as an array in the
+                   synthesized schema, and execute() receives every checked value. -->
+              <div class="gear">
+                <label v-for="item in GEAR" :key="item">
+                  <input type="checkbox" name="gear" :value="item"
+                         toolparamdescription="Equipment the group is bringing" />
+                  {{ item }}
+                </label>
+              </div>
+            </fieldset>
+            <button type="submit" :disabled="applySubmitting">
+              {{ applySubmitting ? 'Filing…' : 'File application' }}
+            </button>
+            <p v-if="applyError" class="error">{{ applyError.message }}</p>
+          </form>
+        </div>
+        <p class="how" style="margin-top: 0.6rem">
+          No <code>toolautosubmit</code> on this one: an agent fills the fields and
+          stops, and the permit is only issued once a person clicks the button.
+        </p>
+      </section>
+
+      <section class="lookup">
+        <h2>Look one up</h2>
+        <!-- No agent-active styling on this one. With toolautosubmit, Chrome 151
+             fires submit before toolactivated and never fires toolcancel, so
+             isAgentActive latches on with nothing left to clear it. The form a
+             person has to confirm, above, is where the cue earns its keep. -->
+        <div class="sheet">
+          <form v-bind="checkAttrs">
+            <label class="field">
+              <span>Reference</span>
+              <input name="reference" placeholder="BP-0001"
+                     toolparamdescription="Permit reference, in the form BP-0001" required />
+            </label>
+            <button type="submit" :disabled="checkSubmitting">Look up</button>
+          </form>
+          <p v-if="checkError" class="error">{{ checkError.message }}</p>
+          <p v-else-if="found" class="how" style="margin: 0.6rem 0 0">{{ found }}</p>
+        </div>
+        <p class="how" style="margin-top: 0.6rem">
+          This one carries <code>toolautosubmit</code>: it only reads, so an agent may
+          fill it in and submit it in one go, without waiting for a click.
+        </p>
+      </section>
+
+      <section class="permits">
+        <h2>Permits issued</h2>
+        <p v-if="!permits.length" class="empty">None yet.</p>
+        <ul>
+          <li v-for="permit in permits" :key="permit.reference" class="permit">
+            <span class="stamp">{{ permit.byAgent ? 'via agent' : 'by hand' }}</span>
+            <span class="reference">{{ permit.reference }}</span>
+            <dl>
+              <dt>Name</dt><dd>{{ permit.name }}</dd>
+              <dt>Beach</dt><dd>{{ permit.beach }}</dd>
+              <dt>Stay</dt><dd>{{ permit.nights }} night{{ permit.nights === 1 ? '' : 's' }}, {{ permit.people }} people</dd>
+              <dt>Gear</dt><dd>{{ permit.gear.length ? permit.gear.join(', ') : '—' }}</dd>
+            </dl>
+          </li>
+        </ul>
+      </section>
+
+      <section class="webmcp-log">
+        <h2>Tool activity</h2>
+        <ol>
+          <li v-for="entry in log" :key="entry.id">
+            <code>{{ entry.tool }}</code>
+            <span class="args">{{ entry.args }}</span>
+            <span class="result">{{ entry.result }}</span>
+            <span class="ms">{{ entry.ms }}</span>
+          </li>
+        </ol>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
