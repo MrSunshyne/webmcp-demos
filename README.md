@@ -11,8 +11,9 @@ Background reading: [WebMCP: The Next User of Your Website is an Agent](https://
 | [Dholl Puri Stand](demos/dholl-puri/) | Ordering flow with imperative tools (menu, cart, checkout) — the street food answer to Google's Pizza Maker |
 | [Pixel Painter](demos/pixel-painter/) | An agent painting on a 16×16 canvas through batched tool calls |
 | [Trip Splitter](demos/trip-splitter/) | Group expense splitting with Vue 3 and the [`vue-webmcp`](https://github.com/MrSunshyne/vue-webmcp) composable, loaded from an import map — a group registered with `useWebMCPTools()`, one more tied to a component's lifecycle, and an activity tape fed by the app-level call hooks |
+| [Beach Permit](demos/beach-permit/) | The declarative API: two `<form toolname>`s wired with `useWebMCPForm()`, schemas synthesized by the browser from the markup, one handler answering both a click and an agent's call |
 
-More ideas on the shortlist, not built yet: a declarative-forms demo (`toolname` attributes on plain HTML forms), a recipe scaler, a CSS theme mixer where the agent tunes design tokens.
+More ideas on the shortlist, not built yet: a recipe scaler, a CSS theme mixer where the agent tunes design tokens.
 
 ## Running locally
 
