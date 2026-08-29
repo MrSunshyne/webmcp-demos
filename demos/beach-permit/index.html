@@ -9,7 +9,7 @@
     {
       "imports": {
         "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.prod.js",
-        "vue-webmcp": "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3/dist/index.mjs"
+        "vue-webmcp": "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3.3/dist/index.mjs"
       }
     }
   </script>
@@ -298,10 +298,10 @@
 
       <section class="lookup">
         <h2>Look one up</h2>
-        <!-- No agent-active styling on this one. With toolautosubmit, Chrome 151
-             fires submit before toolactivated and never fires toolcancel, so
-             isAgentActive latches on with nothing left to clear it. The form a
-             person has to confirm, above, is where the cue earns its keep. -->
+        <!-- No agent-active styling on this one, by design rather than by
+             omission: the browser submits an autosubmit form before it
+             activates it, so isAgentActive stays false throughout and
+             isSubmitting covers the call instead. -->
         <div class="sheet">
           <form v-bind="checkAttrs">
             <label class="field">
@@ -316,7 +316,9 @@
         </div>
         <p class="how" style="margin-top: 0.6rem">
           This one carries <code>toolautosubmit</code>: it only reads, so an agent may
-          fill it in and submit it in one go, without waiting for a click.
+          fill it in and submit it in one go, without waiting for a click. It shows no
+          agent cue for the same reason — <code>isAgentActive</code> marks a form
+          waiting on a person, and this one never waits.
         </p>
       </section>
 

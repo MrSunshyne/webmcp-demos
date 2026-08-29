@@ -20,7 +20,7 @@ import {
   WEBMCP_CONFIG,
   useRegisteredTools,
   useWebMCPTools,
-} from "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3/dist/index.mjs";
+} from "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3.3/dist/index.mjs";
 
 const log = ref([]);
 let logId = 0;

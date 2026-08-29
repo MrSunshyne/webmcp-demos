@@ -19,7 +19,7 @@ import {
   WEBMCP_CONFIG,
   useWebMCPTool,
   useWebMCPTools,
-} from "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3/dist/index.mjs";
+} from "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3.3/dist/index.mjs";
 
 // The tool activity tape lives outside the root component: the config below is
 // provided before the app is created, and the root component reads it back out.
