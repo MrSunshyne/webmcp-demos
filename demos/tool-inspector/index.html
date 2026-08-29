@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tool Inspector — webmcp demos</title>
+  <link rel="stylesheet" href="../../shared/style.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.prod.js",
+        "vue-webmcp": "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3/dist/index.mjs"
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --paper: #e9e6ef;
+      --accent: #c9a0ff;
+      --wire: #4b2d7f;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    h1 {
+      margin-bottom: 0;
+      text-shadow: 3px 3px 0 var(--accent);
+    }
+
+    .rack {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0.4rem 0 0;
+      opacity: 0.6;
+    }
+
+    section {
+      margin: 1.75rem 0;
+    }
+
+    section > h2 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0 0 0.4rem;
+    }
+
+    .panel {
+      border: 3px solid var(--ink);
+      background: #fff;
+      box-shadow: 6px 6px 0 var(--wire);
+      padding: 0.85rem 1rem;
+    }
+
+    .notebook ul {
+      list-style: none;
+      margin: 0 0 0.6rem;
+      padding: 0;
+    }
+
+    .notebook li {
+      padding: 0.15rem 0;
+      border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+    }
+
+    .notebook li:last-child {
+      border-bottom: none;
+    }
+
+    .notebook .index {
+      opacity: 0.4;
+      margin-right: 0.5rem;
+    }
+
+    .gate {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    .gate input {
+      accent-color: var(--wire);
+    }
+
+    /* the discovered tool list */
+    .found {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .found li + li {
+      margin-top: 0.4rem;
+    }
+
+    .found button {
+      width: 100%;
+      text-align: left;
+      box-shadow: none;
+      border-width: 2px;
+      padding: 0.4rem 0.6rem;
+      font-weight: 400;
+    }
+
+    .found button:hover {
+      background: var(--accent);
+    }
+
+    .found button[aria-pressed="true"] {
+      background: var(--accent);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .found .name {
+      font-weight: 700;
+    }
+
+    .found .ro {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: 1px solid var(--wire);
+      color: var(--wire);
+      padding: 0 0.25rem;
+      margin-left: 0.4rem;
+      vertical-align: 0.1em;
+    }
+
+    .found .desc {
+      display: block;
+      font-size: 0.8rem;
+      opacity: 0.65;
+    }
+
+    .call {
+      margin-top: 1rem;
+      border-top: 2px solid var(--ink);
+      padding-top: 0.8rem;
+    }
+
+    .call h3 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 0 0.3rem;
+    }
+
+    textarea {
+      font: inherit;
+      font-size: 0.85rem;
+      width: 100%;
+      min-height: 5.5rem;
+      border: 2px solid var(--ink);
+      padding: 0.4rem 0.5rem;
+      background: #fff;
+      resize: vertical;
+    }
+
+    pre {
+      margin: 0.4rem 0 0;
+      font-size: 0.8rem;
+      background: #f3f0f8;
+      border: 2px solid var(--ink);
+      padding: 0.5rem 0.6rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    pre.schema {
+      max-height: 11rem;
+      overflow-y: auto;
+      opacity: 0.75;
+    }
+
+    .origin {
+      font-size: 0.75rem;
+      opacity: 0.55;
+      margin: 0.3rem 0 0;
+    }
+
+    .iserror {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      border: 1px solid #b3261e;
+      color: #b3261e;
+      padding: 0 0.25rem;
+      margin-left: 0.4rem;
+    }
+
+    .failure {
+      color: #b3261e;
+      font-size: 0.85rem;
+      margin: 0.4rem 0 0;
+    }
+
+    .empty {
+      opacity: 0.5;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .how {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      max-width: 58ch;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <header>
+      <a class="back" href="../../">← all demos</a>
+      <h1>Tool Inspector</h1>
+      <p class="rack">the other half of document.modelContext</p>
+      <div class="webmcp-badge" :data-state="isSupported ? 'on' : 'off'">
+        {{ isSupported ? 'WebMCP active — ' + tools.length + ' tools discovered' : 'no getTools() here — nothing to discover' }}
+      </div>
+    </header>
+    <main>
+      <p class="try">"add a note about the boat, then read the notebook back to me"</p>
+
+      <p class="how">
+        Every other demo on this site answers an agent. This page is the agent:
+        <code>useRegisteredTools()</code> wraps <code>getTools()</code>,
+        <code>executeTool()</code> and the <code>toolchange</code> event, which is
+        what an in-page assistant or a dev panel is built out of. The notebook below
+        is here so there is something to discover — its tools and the panel are two
+        halves of the same page talking through the browser.
+      </p>
+
+      <section class="notebook">
+        <h2>The notebook (the side being inspected)</h2>
+        <div class="panel">
+          <ul>
+            <li v-for="(note, i) in notes" :key="i">
+              <span class="index">{{ i }}</span>{{ note }}
+            </li>
+          </ul>
+          <p v-if="!notes.length" class="empty">Empty.</p>
+          <label class="gate">
+            <input v-model="deletable" type="checkbox" />
+            Register <code>delete-note</code> as well
+          </label>
+        </div>
+        <p class="how" style="margin-top: 0.6rem">
+          That checkbox is the composable's <code>enabled</code> option. Tick it and
+          the tool appears in the panel below on its own — no refresh, no polling:
+          the browser fires <code>toolchange</code> and the list re-reads itself.
+        </p>
+      </section>
+
+      <section>
+        <h2>Discovered tools (the side doing the inspecting)</h2>
+        <div class="panel">
+          <p v-if="!isSupported" class="empty">
+            This browser has a modelContext that can register tools but not discover
+            them, so there is nothing to list.
+          </p>
+          <p v-else-if="error" class="failure">{{ error.message }}</p>
+          <p v-else-if="!tools.length" class="empty">No tools registered on this document.</p>
+          <ul v-else class="found">
+            <li v-for="tool in tools" :key="tool.name">
+              <button
+                type="button"
+                :aria-pressed="selectedName === tool.name"
+                @click="selectedName = selectedName === tool.name ? '' : tool.name"
+              >
+                <span class="name">{{ tool.name }}</span>
+                <span v-if="tool.annotations?.readOnlyHint" class="ro">read only</span>
+                <span class="desc">{{ tool.description }}</span>
+              </button>
+            </li>
+          </ul>
+
+          <div class="actions">
+            <button type="button" @click="refresh()">Re-read getTools()</button>
+          </div>
+
+          <div v-if="selected" class="call">
+            <h3>{{ selected.name }} — arguments</h3>
+            <p class="how" style="margin: 0 0 0.4rem">
+              {{ selected.title || selected.description }}
+            </p>
+            <textarea v-model="argsText" spellcheck="false" aria-label="Arguments as JSON"></textarea>
+            <div class="actions">
+              <button type="button" :disabled="running" @click="run">
+                {{ running ? 'Calling…' : 'Call it' }}
+              </button>
+              <span class="origin">registered by {{ selected.origin }}</span>
+            </div>
+
+            <p v-if="failure" class="failure">{{ failure }}</p>
+            <template v-if="result">
+              <h3 style="margin-top: 0.8rem">
+                Result
+                <span v-if="resultIsError" class="iserror">isError</span>
+              </h3>
+              <pre>{{ result }}</pre>
+              <p v-if="resultIsError" class="how" style="margin: 0.3rem 0 0">
+                The call itself succeeded — a tool that fails answers with an
+                <code>isError</code> result rather than rejecting. Only the browser
+                or a missing tool rejects.
+              </p>
+            </template>
+
+            <h3 style="margin-top: 0.8rem">Input schema, as the browser reports it</h3>
+            <pre class="schema">{{ selected.inputSchema ? pretty(selected.inputSchema) : 'none — this tool takes no arguments' }}</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="webmcp-log">
+        <h2>Tool activity (the far end of each call)</h2>
+        <ol>
+          <li v-for="entry in log" :key="entry.id">
+            <code>{{ entry.tool }}</code>
+            <span class="args">{{ entry.args }}</span>
+            <span class="result">{{ entry.result }}</span>
+            <span class="ms">{{ entry.ms }}</span>
+          </li>
+        </ol>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
