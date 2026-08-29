@@ -169,3 +169,12 @@ button:active {
 .webmcp-log .result::before {
   content: "→ ";
 }
+
+.webmcp-log .ms {
+  opacity: 0.4;
+  font-size: 0.7rem;
+}
+
+.webmcp-log .ms::before {
+  content: " · ";
+}

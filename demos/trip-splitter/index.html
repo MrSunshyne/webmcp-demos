@@ -9,7 +9,7 @@
     {
       "imports": {
         "vue": "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.prod.js",
-        "vue-webmcp": "https://cdn.jsdelivr.net/npm/vue-webmcp@0.1/dist/index.mjs"
+        "vue-webmcp": "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3/dist/index.mjs"
       }
     }
   </script>
@@ -213,12 +213,7 @@
             <input v-model="showSettle" type="checkbox" />
             Open the settle-up panel
           </label>
-          <settle-panel
-            v-if="showSettle"
-            :people="people"
-            :log-call="logCall"
-            @paid="recordPayment"
-          ></settle-panel>
+          <settle-panel v-if="showSettle" :people="people" @paid="recordPayment"></settle-panel>
           <p class="muted">
             The record-payment tool is only registered while the panel is open.
           </p>
@@ -228,10 +223,11 @@
       <section class="webmcp-log">
         <h2>Tool activity</h2>
         <ol>
-          <li v-for="(entry, i) in log" :key="log.length - i">
+          <li v-for="entry in log" :key="entry.id">
             <code>{{ entry.tool }}</code>
             <span class="args">{{ entry.args }}</span>
             <span class="result">{{ entry.result }}</span>
+            <span class="ms">{{ entry.ms }}</span>
           </li>
         </ol>
       </section>
