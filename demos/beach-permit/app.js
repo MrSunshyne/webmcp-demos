@@ -13,7 +13,7 @@
 // index.html maps "vue" to this exact URL so the vue-webmcp module, which
 // imports "vue" internally, shares the same Vue instance.
 import { createApp, ref } from "https://cdn.jsdelivr.net/npm/vue@3.5/dist/vue.esm-browser.prod.js";
-import { WEBMCP_CONFIG, useWebMCPForm } from "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3/dist/index.mjs";
+import { WEBMCP_CONFIG, useWebMCPForm } from "https://cdn.jsdelivr.net/npm/vue-webmcp@0.3.3/dist/index.mjs";
 
 const BEACHES = ["Flic en Flac", "Belle Mare", "Le Morne", "Pointe d'Esny", "Trou aux Biches"];
 const GEAR = ["tent", "barbecue", "kayak", "generator"];
@@ -91,7 +91,12 @@ const app = createApp({
           byAgent: event.agentInvoked === true,
         };
         permits.value.unshift(permit);
-        if (event.target instanceof HTMLFormElement) event.target.reset();
+        // Clearing the form is a nicety for whoever filed it, but resetting it
+        // while an agent's execution is still open cancels the tool call
+        // outright ("Tool execution cancelled by a form reset"), so the agent
+        // gets a rejection instead of its result. Defer it past the response.
+        const form = event.target;
+        if (form instanceof HTMLFormElement) setTimeout(() => form.reset(), 0);
 
         return `Permit ${permit.reference} granted to ${permit.name}: ${permit.beach}, ${permit.nights} night(s), ${permit.people} people.`;
       },
